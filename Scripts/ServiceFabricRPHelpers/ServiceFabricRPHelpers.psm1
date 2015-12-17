@@ -38,7 +38,6 @@ function Get-ApplicationPorts($probes)
 }
 
 
-#>
 function Invoke-ServiceFabricRPClusterScaleUpgrade
 {
 <#
@@ -46,9 +45,8 @@ function Invoke-ServiceFabricRPClusterScaleUpgrade
 Scale service fabric cluster created using PORTAL. 
 
 .DESCRIPTION
-Helper command to scale service fabric cluster created using portal experience. For cluster generated using csm templates directly this is not recommented. 
+Helper command to scale service fabric cluster created using portal experience. For cluster generated using ARM templates directly , do not use this script. You should just modify your ARM template and deploy  
 
-.PARAMETER
 .PARAMETER
 .INPUTS
 .OUTPUTS
@@ -66,11 +64,9 @@ param
     [Parameter(Mandatory=$false)]
     [bool]$PerformAction = $true
 )
-
-    Write-Warning "This script is intended to help for scale up scenario." 
-    Write-Warning "For scale down the script does not remove the VM resources which are disabled."
-
-    Login-AzureRMAccount 
+    Write-Warning "This script is mainly intended to help with the scale up scenario. The Script will add the new VMs and also make the necessary cluster setting changes" 
+    Write-Warning "`For scale down the script does not remove the VM resources, it just makes the necessary cluster setting changes. You will need to delete the VMs via portal or ARM PS, once this srcipt finshes running"
+    Write-Warning "`Please run Login-AzureRMAccount before running this script."
 
     Select-AzureRmSubscription -SubscriptionId $SubscriptionId
 
@@ -90,6 +86,7 @@ param
     $vmDiagnostics = $null
     $secureCluster = $false;
     $dnsName ='';
+    $vmResources = @();
 
     foreach($resource in  $resources){
         
@@ -104,6 +101,11 @@ param
          if(!$vmResource -and $resource.ResourceId.Contains("Microsoft.Compute/virtualMachines"))
          {
             $vmResource = Get-AzureRmResource -ResourceId $resource.ResourceId
+         }
+
+         if($resource.ResourceType.Equals("Microsoft.Compute/virtualMachines"))
+         {
+            $vmResources += Get-AzureRmResource -ResourceId $resource.ResourceId
          }
 
          if($resource.Name -ieq "Microsoft.Insights.VMDiagnosticsSettings"){
@@ -160,6 +162,20 @@ param
         $RGDeploymentParams['certificateThumbprint'] = $clusterResource.Properties.Certificate.Thumbprint;  
     }
 
+    # get node types and node associated with them 
+    $nodeTypeInfo = @{};  
+    foreach($nodeType in  $clusterResource.Properties.NodeTypes){        
+        $nodeTypeInfo[$nodeType.Name] = @(); 
+        foreach($vmResource_ in  $vmResources){
+        
+            if($vmResource_.ResourceName.Contains($nodeType.Name)){
+
+                $nodeTypeInfo[$nodeType.Name] += $vmResource_;
+            }
+        }
+    }
+
+
     $clusterResourceLocation = $clusterResource.Location;
     $RGDeploymentParams['clusterLocation'] = $clusterResource.Location;
     $RGDeploymentParams['clusterName'] = $clusterResource.Name;
@@ -188,58 +204,29 @@ param
     }
     
     #@# ask user for instance count input 
-    $rd.NodeSettings = @();
+    $rd.NodeSettings = New-Object "System.Collections.Generic.List[System.Fabric.CSMTemplate.DefineNodeSettings]";
     $nodeTypeIndex = 0;
-
-    $allowedVMSizes = @(       
-        "Standard_A1",
-        "Standard_A2",
-        "Standard_A3",
-        "Standard_A4",
-        "Standard_A5",
-        "Standard_A6",
-        "Standard_A7",
-        "Standard_A8",
-        "Standard_A9",
-        "Standard_A10",
-        "Standard_A11",
-        "Standard_D1",
-        "Standard_D2",
-        "Standard_D3",
-        "Standard_D4",
-        "Standard_D11",
-        "Standard_D12",
-        "Standard_D13",
-        "Standard_D14",
-        "Standard_DS1",
-        "Standard_DS2",
-        "Standard_DS3",
-        "Standard_DS4",
-        "Standard_DS11",
-        "Standard_DS12",
-        "Standard_DS13",
-        "Standard_DS14"
-      );
-
+    
+    Write-Host "Fetching all the Node types that make up your cluster"
+    Write-Host "`n"
+    
     foreach($nodeType in $clusterResource.Properties.NodeTypes)
     {
-        $instanceCount = Read-Host "Current instance count:$($clusterResource.Properties.ExpectedVmResources[$nodeTypeIndex].VMInstanceCount) `Please input new instance count for $($nodeType.Name)";
-       
-        do{
-        Write-Host "Allowed VM Sizes are" 
-        Write-Host "`n"
-        $allowedVMSizes | % { Write-Host "$_" }
-        $nodeTypeVmSize = Read-Host "Please provide vmsize";
-
-            if(!$allowedVMSizes.Contains($nodeTypeVmSize)){
-                Write-Warning "$nodeTypeVmSize is not in allowed list";
+     #   $instanceCount = Read-Host "Current instance count:$($clusterResource.Properties.ExpectedVmResources[$nodeTypeIndex].VMInstanceCount) `Please input new instance count for $($nodeType.Name)";
+      $instanceCount = Read-Host "Node Type : $($nodeType.Name)   Current VM instance count : $($clusterResource.Properties.ExpectedVmResources[$nodeTypeIndex].VMInstanceCount) `Provide the new instance count for this node type, Specify the same instance count as current if you do not want to scale up or down ";
+  
+        if($nodeType.IsPrimary){
+            while($instanceCount -lt $clusterResource.Properties.ExpectedVmResources[$nodeTypeIndex].VMInstanceCount){
+               Write-Warning "Primary instance count cannot go below $($clusterResource.Properties.ExpectedVmResources[$nodeTypeIndex].VMInstanceCount) instance count"
+               $instanceCount = Read-Host "Current instance count:$($clusterResource.Properties.ExpectedVmResources[$nodeTypeIndex].VMInstanceCount) `Please input new instance count for $($nodeType.Name)";
             }
-        }while(!$allowedVMSizes.Contains($nodeTypeVmSize));
+        }
+        
+        $nodeTypeVmSize = $nodeTypeInfo[$nodeType.Name][$nodeTypeInfo[$nodeType.Name].Count -1].Properties.HardwareProfile.VmSize;
 
         $placementPropertyNames = @();
         $placementPropertyValues = @();
 
-     
         # Ref : converting .NET custom object into hash table 
         # http://blogs.msdn.com/b/timid/archive/2013/03/05/converting-pscustomobject-to-from-hashtables.aspx
         foreach ($myPsObject in $nodeType.PlacementProperties) { 
@@ -255,10 +242,11 @@ param
             $placementPropertyValues = $null
         }
 
-        $rd.NodeSettings += New-Object System.Fabric.CSMTemplate.DefineNodeSettings $clusterResource.Properties.ExpectedVmResources[$nodeTypeIndex].Name , $clusterResource.Properties.ExpectedVmResources[$nodeTypeIndex].Name, $instanceCount, $placementPropertyNames, $placementPropertyValues, $false, $nodeTypeVmSize;
+        $nodeSetting = New-Object System.Fabric.CSMTemplate.DefineNodeSettings $clusterResource.Properties.ExpectedVmResources[$nodeTypeIndex].Name , $clusterResource.Properties.ExpectedVmResources[$nodeTypeIndex].Name, $instanceCount, $placementPropertyNames, $placementPropertyValues, $false, $nodeTypeVmSize;
+
+        $rd.NodeSettings.Add($nodeSetting);
         
         $nodeTypeIndex++;
-
     }
 
     
@@ -281,10 +269,8 @@ param
     
     # generate new template 
 
-    $templateFilePath = "$invocationDir\$([Guid]::NewGuid()).json"
-
-    # $factory = [System.Fabric.CSMTemplate.DocumentGeneratorFactory]
-
+    $templateFilePath = "$($env:TEMP)\$([Guid]::NewGuid()).json"
+    
     $rd.EnableApplicationDiagnosticsCollection  = $enableApplicationDiagnosticsCollect
     $rd.EnableSupportLogCollection = $enableSupportLog
 
@@ -321,6 +307,10 @@ param
     $deploymentResult = New-AzureRmResourceGroupDeployment @RGDeploymentParams -WarningAction SilentlyContinue -Verbose
     
     Write-Host ("Deployment completed at {0:O}" -f [DateTime]::Now)
+
+     if($deploymentResult.ProvisioningState -ieq 'Failed'){ 
+        Write-Warning "Deployment Failed - review the event log for details"       
+    }
 
     Remove-Item $templateFilePath -Force
 }
@@ -395,7 +385,7 @@ try
     $existingKeyVault = Get-AzureRmKeyVault -VaultName $VaultName -ResourceGroupName $ResourceGroupName
     $resourceId = $existingKeyVault.ResourceId
 
-    Write-Host "Using existing vault $VaultName in $($existingKeyVault.Location)"
+    Write-Host "Using existing valut $VaultName in $($existingKeyVault.Location)"
 }
 catch
 {
@@ -420,7 +410,7 @@ if($CreateSelfSignedCertificate)
     $ExistingPfxFilePath = $NewPfxFilePath
 }
 
-Write-Verbose "Reading pfx file from $ExistingPfxFilePath"
+Write-Host "Reading pfx file from $ExistingPfxFilePath"
 $cert = new-object System.Security.Cryptography.X509Certificates.X509Certificate2 $ExistingPfxFilePath, $Password
 
 $bytes = [System.IO.File]::ReadAllBytes($ExistingPfxFilePath)
