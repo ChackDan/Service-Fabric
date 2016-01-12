@@ -213,10 +213,11 @@ param
     foreach($nodeType in $clusterResource.Properties.NodeTypes)
     {
      #   $instanceCount = Read-Host "Current instance count:$($clusterResource.Properties.ExpectedVmResources[$nodeTypeIndex].VMInstanceCount) `Please input new instance count for $($nodeType.Name)";
-      $instanceCount = Read-Host "Node Type : $($nodeType.Name)   Current VM instance count : $($clusterResource.Properties.ExpectedVmResources[$nodeTypeIndex].VMInstanceCount) `Provide the new instance count for this node type, Specify the same instance count as current if you do not want to scale up or down ";
+      $instanceCount = Read-Host "Node Type : $($nodeType.Name)   Current VM instance count : $($clusterResource.Properties.ExpectedVmResources[$nodeTypeIndex].VMInstanceCount) `nProvide the new instance count for this node type, Specify the same instance count as current if you do not want to scale up or down ";
   
         if($nodeType.IsPrimary){
-            while($instanceCount -lt $clusterResource.Properties.ExpectedVmResources[$nodeTypeIndex].VMInstanceCount){
+   #         while($instanceCount -lt $clusterResource.Properties.ExpectedVmResources[$nodeTypeIndex].VMInstanceCount){
+                while($instanceCount -lt 5){ 
                Write-Warning "Primary instance count cannot go below $($clusterResource.Properties.ExpectedVmResources[$nodeTypeIndex].VMInstanceCount) instance count"
                $instanceCount = Read-Host "Current instance count:$($clusterResource.Properties.ExpectedVmResources[$nodeTypeIndex].VMInstanceCount) `Please input new instance count for $($nodeType.Name)";
             }
