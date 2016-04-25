@@ -353,7 +353,7 @@ param(
   [string] $CertificateName,
    
   [Parameter(Mandatory=$true)]
-  [string] $Password,   
+  [Security.SecureString] $Password,   
 
   [Parameter(Mandatory=$true, ParameterSetName="CreateNewCertificate")]
   [switch] $CreateSelfSignedCertificate,
