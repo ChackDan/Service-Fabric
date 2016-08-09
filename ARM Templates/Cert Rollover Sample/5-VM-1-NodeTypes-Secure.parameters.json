@@ -1,0 +1,54 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "clusterName": {
+      "value": "Cluster"
+    },
+    "clusterLocation": {
+      "value": "westus"
+    },
+    "adminUserName": {
+      "value": "chacko"
+    },
+    "vmImagePublisher": {
+      "value": "MicrosoftWindowsServer"
+    },
+    "vmImageOffer": {
+      "value": "WindowsServer"
+    },
+    "vmImageSku": {
+      "value": "2012-R2-Datacenter"
+    },
+    "vmImageVersion": {
+      "value": "latest"
+    },
+    "loadBalancedAppPort1": {
+      "value": 80
+    },
+    "loadBalancedAppPort2": {
+      "value": 8081
+    },
+    "certificateStoreValue": {
+      "value": "My"
+    },
+    "certificateThumbprint": {
+      "value": "DF95064C525C5297CA530478E9009212341D6335"
+    },
+    "sourceVaultValue": {
+      "value": "/subscriptions/6c653126-e4ba-42cd-a1dd-f7sd96ae7a47/resourceGroups/chackowestuskv/providers/Microsoft.KeyVault/vaults/chackokv9"
+    },
+    "certificateUrlValue": {
+      "value": "https://chackokv9.vault.azure.net:443/secrets/chackdantestcertificate3/9a324dfe10e4b41b28d1dff7dc0b3dc56"
+     },
+    "clusterProtectionLevel": {
+      "value": "EncryptAndSign"
+    },
+    "storageAccountType": {
+      "value": "Standard_LRS"
+    },
+    "supportLogStorageAccountType": {
+      "value": "Standard_LRS"
+    }
+  }
+}

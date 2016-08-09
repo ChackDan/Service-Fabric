@@ -1,0 +1,24 @@
+
+# Introduction
+
+This folder contains the set of ARM templates  you can use to deploy a secure five node service fabric cluster, add a new certificate and then rollover the current primary certificate. You can use these to follow along the documentation for [rolling over certificates in your secure cluster](https://azure.microsoft.com/en-us/documentation/articles/service-fabric-cluster-security-update-certs-azure/)
+
+
+## Microsoft Azure Service Fabric ARM template Samples in this folder
+
+### provision a secure cluster 
+1. Template to provision a five node secure cluster - 5-VM-1-NodeTypes-Secure.JSON 
+2. Template parameters for the above template - 5-VM-1-NodeTypes-Secure.parameters.JSON 
+
+
+### Add a secondary certificate and swamp it to be the primary using  ARM Powershell
+
+[Documentation on how rolling over certificates in your secure cluster](https://azure.microsoft.com/en-us/documentation/articles/service-fabric-cluster-security-update-certs-azure/)
+
+1. Template to provision a five node secure cluster - 5-VM-1-NodeTypes-Secure.JSON 
+2. Template parameters for the above template - 5-VM-1-NodeTypes-Secure.parameters.JSON 
+
+
+### To Do - add a sample on how to delete a certificate from a VM.
+
+This is not a critical item to complete, and so I will add this to my backlog
