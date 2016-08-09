@@ -1,0 +1,24 @@
+{
+  "runtimeSettings": [
+    {
+      "handlerSettings": {
+        "protectedSettingsCertThumbprint": "FE1C82D8EAB5C7CF743729FE5852CA64910C3927",
+        "protectedSettings": "MIICkwYJKoZIhvcNAQcDoIIChDCCAoACAQAxggFpMIIBZQIBADBNMDkxNzA1BgoJkiaJk/IsZAEZFidXaW5kb3dzIEF6dXJlIENSUCBDZXJ0aWZpY2F0ZSBHZW5lcmF0b3ICEEeki61w9xmOT7VcVrNKGMwwDQYJKoZIhvcNAQEBBQAEggEADDRCTKqSrqleFBvoWwRAzppXC/pGqS7ScXRTigRqyDYqR8T7kTgc/fGJLOgqhTcaoAwek0DNzwCVUBay3qFfQzLj2v4FkwxpszWhyxSy/VdMwGCA3KrZ2qgwoNgDRcfQPYynk8DaUFlULRJBj3doTIJH9ykH/5UQzv6BAShSICekefJ4LRInJCqxWMYqOc0C8jHK/3vEtz56ev2DdwZGBw0DSQHg5ahlPrl+V+ASInbWs/Ka+rOJWVXdUr09VBAO0zUypFG3+QxD46MnzGtkcBaVEUkwQQm62BBdi0nFb1tsECcDgAI8GQLIR29umjmrg+9AbNm03WzOIgbAPBf/NzCCAQwGCSqGSIb3DQEHATAUBggqhkiG9w0DBwQIqhTz2P3/O86AgeihsB/ojSor51GvHbnWMSjOFikg5aYVPUnj+TzS86LdlfQ4hoUJHabaExwgwxs2jX3/1oEQvjwtE0ESr254+i1SgPdIG2HF8GlUsG1Snd9iZFWXklT48ueqCZRP9Z3WmOAoImpy3su+9kghQ4sneTn0W8/eJOYUOgf4cG9ly053z9ajcEH9CeMYxYdFJC6NJ3sFV3ny/dv6iVfdDCflqeCntxAkrHEZNWbX6qaARvVxgmEFEWlJSgCk3JrMeqYsoGWP0SqikEC1IRFM0iCGye/CXBbPbtbckR8YjsFaFnhU9vtByz6k3K7o",
+        "publicSettings": {
+			"clusterEndpoint":"https://westus.servicefabric.azure.com/runtime/clusters/cac3801f-2ace-4aef-b413-615831213895",
+			"nodeTypeRef":"nt1vm",
+			"dataPath":"D:\\\\SvcFab",
+			"durabilityLevel":"Bronze",
+			"certificate":{
+				"thumbprint":"DF95064C525C5297CA530478E9009215B91D6335",
+				"x509StoreName":"My"
+				},
+			"secondaryCertificate":{
+				"thumbprint":"70EF5E22ADB649799DA3C8B6A6BF7EF1D630F8F3",
+				"x509StoreName":"My"
+				}
+			}
+      }
+    }
+  ]
+}
