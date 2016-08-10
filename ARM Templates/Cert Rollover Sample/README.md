@@ -7,8 +7,8 @@ This folder contains the set of ARM templates  you can use to deploy a secure fi
 ## Microsoft Azure Service Fabric ARM template Samples in this folder
 
 ### Step1: Provision a secure cluster 
-1. Template to provision a five node secure cluster - 5-VM-1-NodeTypes-Secure.JSON 
-2. Template parameters for the above template - 5-VM-1-NodeTypes-Secure.parameters.JSON 
+1. Template to provision a five node secure cluster - 5-VM-1-NodeTypes-Secure_Step1.JSON 
+2. Template parameters for the above template - 5-VM-1-NodeTypes-Secure.parameters_Step1.JSON 
 
 
 ### Step2 :Add a secondary certificate and swamp it to be the primary using  ARM Powershell
