@@ -3,8 +3,6 @@ import os
 import base64
 import json
 import sys
-import getopt
-import errno
 import logging
 import logging.handlers
 import subprocess
@@ -12,12 +10,6 @@ import time
 import re
 import argparse
 
-
-from enum import Enum 
-
-class CertificateType(Enum):
-    pfx = 1
-    pem = 2
 
 operation = "keyvault_helper_module"
 script_path = os.path.realpath(__file__)
@@ -116,11 +108,6 @@ class Result(object):
     data = None
     info_msg = ""
 
-    def __init__(self):
-        # type: () -> object
-        self.success = True
-        self.data = {}
-
     def __init__(self, success=True, error_msg="", info_msg="", data={}):
         self.success = success
         self.error_msg = error_msg
@@ -196,9 +183,8 @@ def parse_result(output, error):
     p_output = parse_output(output=output)
     p_error = parse_output(output=error)
 
-    p_result = Result(p_error.IsSuccess(), p_error.getErrorMessage(), p_output.getInfoMessage(), p_output.getData())
+    return Result(p_error.IsSuccess(), p_error.getErrorMessage(), p_output.getInfoMessage(), p_output.getData())
 
-    return p_result
 
 def set_subscription(subscription_id):
     set_azure_subscription = "azure account set {0}".format(subscription_id)
@@ -246,12 +232,13 @@ def create_key_vault(keyvault_name, resource_group_name, region):
             show_parsed_result = parse_result(output1, error1)
             parsed_result.error_code = status1
 
-            return parsed_result
+            return parsed_result.data["id"]
 
         else:
             raise OperationFailed(create_keyvault, parsed_result.error_msg)
 
-    return parsed_result
+    return parsed_result.data["id"]
+
 
 
 def upload_secret(resource_group_name, region, keyvault_name,  secret, subscription, certificate_name):
@@ -259,26 +246,24 @@ def upload_secret(resource_group_name, region, keyvault_name,  secret, subscript
     set_keyvault_secret = "azure keyvault secret set --vault-name '{0}' --secret-name '{1}' --value '{2}'".format(keyvault_name, certificate_name, secret)
     enable_keyvault_for_deployment = "azure keyvault set-policy --vault-name '{0}' --enabled-for-deployment {1} --enabled-for-template-deployment {1}".format(keyvault_name, "true")
 
-
-    return_error_code = 0
-
     status, output, error = execute_command(set_keyvault_secret)
 
-    parsed_result = parse_result(output, error)
-    parsed_result.error_code = status
+    sourceurl_result = parse_result(output, error)
+    sourceurl_result.error_code = status
 
-    if not parsed_result.IsSuccess():
-        raise OperationFailed(set_keyvault_secret, parsed_result.error_msg)
+    sourceurl = sourceurl_result.data["id"]
 
-    status, output, error = execute_command(enable_keyvault_for_deployment)
-    parsed_result = parse_result(output, error)
-    parsed_result.error_code = status
+    if not sourceurl_result.IsSuccess():
+        raise OperationFailed(set_keyvault_secret, sourceurl_result.error_msg)
 
-    if not parsed_result.IsSuccess():
-        raise OperationFailed(enable_keyvault_for_deployment, parsed_result.error_msg)
+    status2, output2, error2 = execute_command(enable_keyvault_for_deployment)
+    parsed_result = parse_result(output2, error2)
+    parsed_result.error_code = status2
 
+    if 0 != status2:
+        raise OperationFailed(enable_keyvault_for_deployment, error2)
 
-    return parsed_result
+    return sourceurl
 
 def get_certificate_content(certificate_path):
     fh = open('sfrptestautomation.pfx', 'rb')
@@ -393,7 +378,7 @@ class Certificate(object):
         thumbprint = self.extract_thumbprint()
         self.cleanup()
 
-        return thumbprint, kv_result.getData(), secret_result.getData()
+        return thumbprint, kv_result, secret_result
 
 class pfx_certificate_format(Certificate):
     def manupulate_cert(self):
@@ -411,7 +396,6 @@ class pfx_certificate_format(Certificate):
         status, output, error = execute_command(rm_tmp_pem)
         if (status != 0):
             print error
-
 
 class pem_certificate_format(Certificate):
     def manupulate_cert(self):
@@ -443,19 +427,78 @@ def cert_factory(input_params):
                                         location=input_params["location"],
                                         certificate_name=input_params["certificate_name"])
     elif "pfx" in input_params["cert_type"]:
-        pfx_certificate_format(subscription_id= input_params["subscription_id"],
+        return pfx_certificate_format(subscription_id= input_params["subscription_id"],
                                         rg_name= input_params["resource_groupname"],
                                         pfx_file_path=input_params["cert_file"],
                                         kv_name=input_params["keyvault_name"],
                                         location=input_params["location"],
                                         certificate_name=input_params["certificate_name"])
+    elif "self_sign" in input_params["cert_type"]:
+        return  pem_certificate_format( subscription_id= input_params["subscription_id"],
+                                        rg_name= input_params["resource_groupname"],
+                                        pem_file_path=input_params["cert_file"],
+                                        kv_name=input_params["keyvault_name"],
+                                        location=input_params["location"],
+                                        certificate_name=input_params["certificate_name"])
 
+def prepare_self_sign_certificate(subject, certificate_name):
+    certificate_file = '/tmp/{0}.pem'.format(certificate_name)
+    create_certificate= 'openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout {0} -out {0} -subj "/CN={1}"'.format(certificate_file, subject)
+    status, output, error = execute_command(create_certificate)
+
+    parsed_result = parse_result(output, error)
+    parsed_result.error_code = status
+
+    if not parsed_result.IsSuccess():
+        raise OperationFailed(create_resource_group, parsed_result.getErrorMessage())
+
+    return certificate_file
+
+def verify_required_params(args):
+    if not args.subscription_id:
+        print ("subscription id is required")
+        sys.exit()
+    if not args.resource_group_name:
+        print ("resource group name is required")
+        sys.exit()
+    if not args.key_vault_name:
+        print ("key vault name is required")
+        sys.exit()
+    if not args.location:
+        print ("location is required")
+        sys.exit()
+
+    if not args.certificate_name:
+        print ("certificate name  is required")
+        sys.exit()
+
+    if not args.password:
+        print ("password is required")
+        sys.exit()
 
 def cert_factory(args):
-    if ("pem" in args.certificate_type and "pfx" in args.certificate_type):
-        print "select pem or pfx cert type which matches to input certificate file"
+
+    verify_required_params(args)
+
+    if("ss" in args.which):
+        if (args.subjectname and args.certificate_name):
+            cert_file = prepare_self_sign_certificate(args.subjectname, args.certificate_name)
+            return pem_certificate_format(subscription_id=args.subscription_id,
+                                      rg_name=args.resource_group_name,
+                                      pem_file_path=cert_file,
+                                      kv_name=args.key_vault_name,
+                                      location=args.location,
+                                      certificate_name=args.certificate_name,
+                                      password=args.password)
+        else:
+            print ("selfsign flag cannot be passed witout subjectname and certificatename")
+            sys.exit()
+
+    if ("pem" in args.which and "pfx" in args.which):
+        if not (args.input_cert_file):
+            print "input certificate file path is required"
         sys.exit()
-    elif "pem" in args.certificate_type:
+    if "pem" in args.which:
         return  pem_certificate_format( subscription_id= args.subscription_id,
                                         rg_name= args.resource_group_name,
                                         pem_file_path=args.input_cert_file,
@@ -463,7 +506,7 @@ def cert_factory(args):
                                         location=args.location,
                                         certificate_name=args.certificate_name,
                                         password=args.password)
-    elif "pfx" in args.certificate_type:
+    elif "pfx" in args.which:
         return pfx_certificate_format(subscription_id= args.subscription_id,
                                         rg_name= args.resource_group_name,
                                         pfx_file_path=args.input_cert_file,
@@ -479,14 +522,39 @@ def get_arg_parser():
 
     arg_parser = argparse.ArgumentParser()
 
-    arg_parser.add_argument('-sub', '--subscription_id', action = 'store', help = 'Path to subscription', required = True)
-    arg_parser.add_argument('-rgname', '--resource_group_name', action = 'store', help = 'name of resource group', required = True)
-    arg_parser.add_argument('-kv', '--key_vault_name', action = 'store', help = 'Key vault name', required = True)
-    arg_parser.add_argument('-ifile', '--input_cert_file', action = 'store', help = 'Input certificate file', required = True)
-    arg_parser.add_argument('-ctype', '--certificate_type',  action = 'store', help = 'type of certificate file, pem or pfx format is allowed', required = True)
-    arg_parser.add_argument('-sname', '--certificate_name', action = 'store', help = 'Name for secret', required = True)
-    arg_parser.add_argument('-l', '--location', action = 'store', help = 'Location', required = True)
-    arg_parser.add_argument('-p', '--password', action='store', help='password for certificate', required = True)
+    subparsers = arg_parser.add_subparsers(help='commands')
+    pem_parser =subparsers.add_parser('pem', help='pfx input file commands')
+    pem_parser.set_defaults(which="pem")
+    pfx_parser = subparsers.add_parser('pfx', help='pem input file commands')
+    pfx_parser.set_defaults(which="pfx")
+    ss_parser =subparsers.add_parser('ss', help='self sign certificate commands')
+    ss_parser.set_defaults(which="ss")
+
+    # pem and pfx required file
+    pem_parser.add_argument('-ifile', '--input_cert_file', action = 'store', help = 'Input certificate file')
+    pem_parser.add_argument('-sub', '--subscription_id', action='store', help='Path to subscription')
+    pem_parser.add_argument('-rgname', '--resource_group_name', action='store', help='name of resource group')
+    pem_parser.add_argument('-kv', '--key_vault_name', action='store', help='Key vault name')
+    pem_parser.add_argument('-sname', '--certificate_name', action='store', help='Name for secret')
+    pem_parser.add_argument('-l', '--location', action='store', help='Location')
+    pem_parser.add_argument('-p', '--password', action='store', help='password for certificate')
+
+    pfx_parser.add_argument('-ifile', '--input_cert_file', action = 'store', help = 'Input certificate file')
+    pfx_parser.add_argument('-sub', '--subscription_id', action='store', help='Path to subscription')
+    pfx_parser.add_argument('-rgname', '--resource_group_name', action='store', help='name of resource group')
+    pfx_parser.add_argument('-kv', '--key_vault_name', action='store', help='Key vault name')
+    pfx_parser.add_argument('-sname', '--certificate_name', action='store', help='Name for secret')
+    pfx_parser.add_argument('-l', '--location', action='store', help='Location')
+    pfx_parser.add_argument('-p', '--password', action='store', help='password for certificate')
+
+    # subj name only required for self sign certificate
+    ss_parser.add_argument('-subj', '--subjectname', action='store', help='subject name for self sign certificate')
+    ss_parser.add_argument('-sub', '--subscription_id', action='store', help='Path to subscription')
+    ss_parser.add_argument('-rgname', '--resource_group_name', action='store', help='name of resource group')
+    ss_parser.add_argument('-kv', '--key_vault_name', action='store', help='Key vault name')
+    ss_parser.add_argument('-sname', '--certificate_name', action='store', help='Name for secret')
+    ss_parser.add_argument('-l', '--location', action='store', help='Location')
+    ss_parser.add_argument('-p', '--password', action='store', help='password for certificate')
 
     return arg_parser
 
@@ -497,8 +565,9 @@ def main():
     cert = cert_factory(args)
 
     thumbprint, resourceid, secreturl = cert.upload_cert()
-
-    print("SourceVault: {1}\nCertificateUrl: {2}\nCertificateThumbprint: {0}\n".format(thumbprint, resourceid["id"], secreturl["id"]))
+    if("ss" in args.which):
+        print "Please copy self signed cert from : {0}".format(cert.pem_file_path)
+    print("SourceVault: {1}\nCertificateUrl: {2}\nCertificateThumbprint: {0}\n".format(thumbprint, resourceid, secreturl))
 
 
 if __name__ == "__main__":
