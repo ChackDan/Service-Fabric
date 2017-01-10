@@ -68,16 +68,16 @@
         "description": "The store name where the cert will be deployed in the virtual machine"
       }
     },
-    "certificateThumbprint": {
-      "type": "string",
-      "metadata": {
-        "description": "Certificate Thumbprint"
-      }
-    },
     "sourceVaultValue": {
       "type": "string",
       "metadata": {
         "description": "Resource Id of the key vault, is should be in the format of /subscriptions/<Sub ID>/resourceGroups/<Resource group name>/providers/Microsoft.KeyVault/vaults/<vault name>"
+      }
+    },
+    "certificateThumbprint": {
+      "type": "string",
+      "metadata": {
+        "description": "Certificate Thumbprint"
       }
     },
     "certificateUrlValue": {
@@ -90,12 +90,6 @@
       "type": "string",
       "metadata": {
         "description": "Certificate Thumbprint"
-      }
-    },
-   "secSourceVaultValue": {
-      "type": "string",
-      "metadata": {
-        "description": "Resource Id of the key vault, is should be in the format of /subscriptions/<Sub ID>/resourceGroups/<Resource group name>/providers/Microsoft.KeyVault/vaults/<vault name>"
       }
     },
     "secCertificateUrlValue": {
@@ -448,6 +442,7 @@
                     "nodeTypeRef": "[variables('vmNodeType0Name')]",
                     "dataPath": "D:\\\\SvcFab",
                     "durabilityLevel": "Bronze",
+                    "nicPrefixOverride": "[variables('subnet0Prefix')]",
                     "certificate": {
                       "thumbprint": "[parameters('secCertificateThumbprint')]",
                       "x509StoreName": "[parameters('certificateStoreValue')]"

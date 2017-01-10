@@ -33,22 +33,19 @@
       "value": "My"
     },
     "secCertificateThumbprint": {
-      "value": "DF95064C525C5297CA530478E9009212341D6335"
-    },
-   "secSourceVaultValue": {
-      "value": "/subscriptions/6c653126-e4ba-42cd-a1dd-f7sd96ae7a47/resourceGroups/chackowestuskv/providers/Microsoft.KeyVault/vaults/chackokv9"
+      "value": "thumbprint value"
     },
     "secCertificateUrlValue": {
-      "value": "https://chackokv9.vault.azure.net:443/secrets/chackdantestcertificate3/9a324dfe10e4b41b28d1dff7dc0b3dc56"
+      "value": "Refers to the location URL in your key vault where the certificate was uploaded, it is should be in the format of https://<name of the vault>.vault.azure.net:443/secrets/<exact location>"
      },
     "certificateThumbprint": {
-      "value": "70EF5E22ADB649799DA3C8B6A6BF7SD1D630F8F3"
+      "value": "thumbprint value"
     },
     "sourceVaultValue": {
-      "value": "/subscriptions/6c653126-e4ba-42cd-a1dd-f7sd96ae7a47/resourceGroups/chackowestuskv/providers/Microsoft.KeyVault/vaults/chackokv9"
+      "value": "/subscriptions/subscription value/resourceGroups/key vault resource group name/providers/Microsoft.KeyVault/vaults/key valut name"
     },
     "certificateUrlValue": {
-      "value": "https://chackokv9.vault.azure.net:443/secrets/chackdantestcertificate4/423ec7c4dc61a462bbc645ffc9b4b225f"
+      "value": "Refers to the location URL in your key vault where the certificate was uploaded, it is should be in the format of https://<name of the vault>.vault.azure.net:443/secrets/<exact location>"
      },
     "clusterProtectionLevel": {
       "value": "EncryptAndSign"
