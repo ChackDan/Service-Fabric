@@ -639,6 +639,7 @@
             },
             "osDisk": {
               "createOption": "FromImage",
+              "caching": "ReadOnly",
               "managedDisk": {
                 "storageAccountType": "[parameters('storageAccountType')]"
               }

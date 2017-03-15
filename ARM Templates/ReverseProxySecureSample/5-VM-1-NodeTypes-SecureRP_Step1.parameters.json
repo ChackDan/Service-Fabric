@@ -48,7 +48,7 @@
       "value": "EncryptAndSign"
     },
     "storageAccountType": {
-      "value": "Standard_LRS"
+      "value": "Premium_LRS"
     },
     "supportLogStorageAccountType": {
       "value": "Standard_LRS"
