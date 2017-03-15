@@ -156,7 +156,7 @@
         "Standard_LRS",
         "Premium_LRS"
       ],
-      "defaultValue": "Premium_LRS",
+      "defaultValue": "Standard_LRS",
       "metadata": {
         "description": "Replication option for the VM image storage account"
       }
