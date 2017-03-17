@@ -199,7 +199,7 @@
     "virtualNetworkName": "VNet",
     "addressPrefix": "10.0.0.0/16",
     "nicName": "NIC",
-    "lbIPName": "PublicIP-LB-FE",
+    "lbIPName": "[concat('PublicIP-LB-FE-', parameters('clusterName'))]", 
     "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',variables('virtualNetworkName'))]",
     "overProvision": "false",
     "vmssApiVersion": "2016-03-30",
@@ -697,7 +697,12 @@
           "x509StoreName": "[parameters('sfReverseProxyCertificateStoreValue')]"
         },
         "clientCertificateCommonNames": [],
-        "clientCertificateThumbprints": [],
+        "clientCertificateThumbprints": [
+          {
+            "CertificateThumbprint": "[parameters('clusterCertificateThumbprint')]",
+            "IsAdmin": true
+          }
+        ],
         "clusterState": "Default",
         "diagnosticsStorageAccountConfig": {
           "blobEndpoint": "[reference(concat('Microsoft.Storage/storageAccounts/', variables('supportLogStorageAccountName')), variables('storageApiVersion')).primaryEndpoints.blob]",
