@@ -1,0 +1,7 @@
+{
+  "itemDisplayName": "Deploy a 5 Node Secure Cluster with DNS service",
+  "description": "This template allows you to deploy a secure 5 node Service fabric Cluster running Windows server 2012 R2 Data center with DNS service on",
+  "summary": "This template takes a minimum amount of parameters and deploys 5  Node Service Fabric Cluster",
+  "githubUsername": "chackdan",
+  "dateUpdated": "2017-05-01"
+}

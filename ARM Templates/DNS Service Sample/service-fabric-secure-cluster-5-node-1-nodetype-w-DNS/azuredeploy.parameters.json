@@ -1,0 +1,63 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "clusterLocation": {
+      "value": "westus"
+    },
+    "clusterName": {
+      "value": "anupv201705081117"
+    },
+    "adminUserName": {
+      "value": "testadm"
+    },
+    "adminPassword": {
+      "value": "Pa$$word$1"
+    },
+    "vmImagePublisher": {
+      "value": "MicrosoftWindowsServer"
+    },
+    "vmImageOffer": {
+      "value": "WindowsServer"
+    },
+    "vmImageSku": {
+      "value": "2012-R2-Datacenter"
+    },
+    "vmImageVersion": {
+      "value": "latest"
+    },
+    "loadBalancedAppPort1": {
+      "value": 80
+    },
+    "loadBalancedAppPort2": {
+      "value": 8081
+    },
+    "certificateStorevalue": {
+      "value": "My"
+    },
+    "certificateThumbprint": {
+      "value": "‎a13273f20693d4f64df0a95f3cc2601a0c84c29d"
+    },
+    "sourceVaultvalue": {
+      "value": "/subscriptions/13ad2c84-84fa-4798-ad71-e70c07af873f/resourceGroups/avkvrg/providers/Microsoft.KeyVault/vaults/avkv"
+    },
+    "certificateUrlvalue": {
+      "value": " https://avkv.vault.azure.net:443/secrets/sfrptestautomation/f2e95aa3c4a4484da54399b8c8405b7d"
+    },
+    "clusterProtectionLevel": {
+      "value": "EncryptAndSign"
+    },
+    "storageAccountType": {
+      "value": "Standard_LRS"
+    },
+    "supportLogStorageAccountType": {
+      "value": "Standard_LRS"
+    },
+    "applicationDiagnosticsStorageAccountType": {
+      "value": "Standard_LRS"
+    },
+    "nt0InstanceCount": {
+      "value": 5
+    }
+  }
+}
