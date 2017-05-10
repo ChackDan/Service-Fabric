@@ -1,6 +1,6 @@
 # Create a Service Fabric cluster with OMS 
 
-This template allows you to deploy a secure 1, 3 - 99 node Service Fabric cluster on Standard_D2 sized VMs with Windows Azure Diagnostics turned on. The template also creates an OMS Workspace and a Service Fabric solution within it.
+This template allows you to deploy a secure 1, 3 - 99 node Service Fabric cluster on Standard_D2 sized VMs with Windows Azure Diagnostics turned on. The template also creates an OMS Workspace and a Service Fabric solution within it, and deploys an OMS agent to each of the nodes to collect diagnostics information.
 
 ## Creating a custom ARM template
 
