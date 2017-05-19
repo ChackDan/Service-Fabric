@@ -48,6 +48,7 @@ Here, it sets the Reverse Proxy certificate in the Service Fabric cluster resour
 
 ## Configure reverse proxy to connect to secure services
 The below three templates show the different options to establish a secure channel between reverse proxy and services.
+To read more about configuring secure end-to-end communication via the Reverse Proxy, refer [Connect to a secure service with the reverse proxy](https://docs.microsoft.com/azure/service-fabric/service-fabric-reverseproxy-configure-secure-communication)
 
 ### 5-VM-1-NodeTypes-SecureRP_ServiceCertValidationNone.JSON
 Use this template to deploy a 5 node cluster with reverse proxy listening on HTTPS. Here ApplicationCertificateValidationPolicy is set to None. 
