@@ -45,3 +45,17 @@ Here, it sets the Reverse Proxy certificate in the Service Fabric cluster resour
 
 1. Template to provision a five node secure cluster and have Reverse Proxy use the new certificate- 5-VM-1-NodeTypes-SecureRP_RollOverStep2.JSON 
 2. Template parameters for the above template - 5-VM-1-NodeTypes-SecureRP_RollOverStep2.parameters.JSON 
+
+## Configure reverse proxy to connect to secure services
+The below three templates show the different options to establish a secure channel between reverse proxy and services.
+To read more about configuring secure end-to-end communication via the Reverse Proxy, refer [Connect to a secure service with the reverse proxy](https://docs.microsoft.com/azure/service-fabric/service-fabric-reverseproxy-configure-secure-communication)
+
+### 5-VM-1-NodeTypes-SecureRP_ServiceCertValidationNone.JSON
+Use this template to deploy a 5 node cluster with reverse proxy listening on HTTPS. Here ApplicationCertificateValidationPolicy is set to None. 
+Reverse proxy will skip the server certificate validation while connecting to secure services.
+
+### 5-VM-1-NodeTypes-SecureRP_ServiceCertValidationCommonName.JSON
+This template shows how to configure the reverse proxy to validate the service's certificate based on certificate common name and issue's thumbprint.
+
+###  5-VM-1-NodeTypes-SecureRP_ServiceCertValidationThumbprints.JSON
+This template shows how to configure the reverse proxy to validate the service's certificate based on certificate's thumbprints. 
