@@ -32,7 +32,7 @@ There are three pieces of information you will need to provide in your template 
 
 Certificate Thumbprint:
 ```
-CERT_THUMB=$(openssl x509 -in server.crt -noout -sha256 -fingerprint | awk -F= '{print $NF}' | sed -e 's/://g')
+CERT_THUMB=$(openssl x509 -in server.crt -noout -fingerprint | awk -F= '{print $NF}' | sed -e 's/://g')
 ```
 
 Secret's URL:
