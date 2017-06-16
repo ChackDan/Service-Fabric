@@ -444,7 +444,7 @@ $output.SourceVault = $resourceId;
 $output.CertificateURL = $secret.Id;
 $output.CertificateThumbprint = $cert.Thumbprint;
 
-return $output  | Format-List;
+return $output;
 }
 
 Export-ModuleMember -Function Invoke-ServiceFabricRPClusterScaleUpgrade
