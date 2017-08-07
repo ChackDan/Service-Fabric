@@ -1,0 +1,39 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "clusterName": {
+      "value": "linuxclusterwithomsagent"
+    },
+     "adminUserName": {
+      "value": "adminuser"
+      },
+    "adminPassword": {
+      "value": ""
+      },
+    "clusterLocation": {
+      "value": "eastus"
+    },  
+    "certificateThumbprint": {
+      "value": ""
+    },
+    "sourceVaultValue": {
+      "value": ""
+    },
+    "certificateUrlValue": {
+      "value": ""
+     },
+    "clusterProtectionLevel": {
+      "value": "EncryptAndSign"
+    },
+    "storageAccountType": {
+      "value": "Standard_LRS"
+    },
+    "supportLogStorageAccountType": {
+      "value": "Standard_LRS"
+    },
+    "omsWorkspacename": {
+      "value": "sfomsworkspace"
+    }
+  }
+}
