@@ -159,10 +159,10 @@
     "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',variables('virtualNetworkName'))]",
     "overProvision": "false",
     "vmssApiVersion": "2017-03-30",
-    "lbApiVersion": "2017-04-01",
-    "vNetApiVersion": "2017-04-01",
+    "lbApiVersion": "2017-08-01",
+    "vNetApiVersion": "2017-08-01",
     "storageApiVersion": "2016-01-01",
-    "publicIPApiVersion": "2015-06-15",
+    "publicIPApiVersion": "2017-08-01",
     "nt0applicationStartPort": "20000",
     "nt0applicationEndPort": "30000",
     "nt0ephemeralStartPort": "49152",
@@ -246,11 +246,14 @@
       "type": "Microsoft.Network/publicIPAddresses",
       "name": "[concat(variables('lbIPName'),'-','0')]",
       "location": "[variables('computeLocation')]",
+      "sku": {
+        "name": "Standard"  
+     },
       "properties": {
         "dnsSettings": {
           "domainNameLabel": "[variables('dnsName')]"
         },
-        "publicIPAllocationMethod": "Dynamic"
+        "publicIPAllocationMethod": "Static"
       },
       "tags": {
         "resourceType": "Service Fabric",
@@ -262,6 +265,9 @@
       "type": "Microsoft.Network/loadBalancers",
       "name": "[concat('LB','-', parameters('clusterName'),'-',variables('vmNodeType0Name'))]",
       "location": "[variables('computeLocation')]",
+      "sku": {
+        "name": "Standard"  
+     },
       "dependsOn": [
         "[concat('Microsoft.Network/publicIPAddresses/',concat(variables('lbIPName'),'-','0'))]"
       ],
