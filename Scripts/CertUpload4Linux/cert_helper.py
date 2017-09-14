@@ -159,6 +159,14 @@ def parse_output(output):
 
             first_token = line_info[0].rstrip(':').encode('utf-8')
 
+            searchStr = output_lines[index].encode('utf-8')
+            if "id" in searchStr:
+                value_pattern = re.compile(r'"([^"]*)"')
+                value_result = re.search(value_pattern, searchStr)
+                if value_result:
+                    result.addData("id", value_result.groups()[0])
+
+
             if error_token in first_token:
                     result.setErrorMessage(output_lines[index].lstrip("error:").encode('utf-8'))
 
@@ -214,7 +222,7 @@ def create_resource_group(resource_group_name, region):
 
 
 def create_key_vault(keyvault_name, resource_group_name, region):
-    create_keyvault = "az keyvault create --name '{0}' --resource-group '{1}' --location '{2}'".format(keyvault_name, resource_group_name, region)
+    create_keyvault = "az keyvault create --name '{0}' --resource-group '{1}' --location '{2}' --enabled-for-deployment {3} --enabled-for-template-deployment {3}".format(keyvault_name, resource_group_name, region, "true")
     show_keyvault = "az keyvault show --name '{0}'".format(keyvault_name)
 
     status, output, error = execute_command(create_keyvault)
@@ -243,8 +251,8 @@ def create_key_vault(keyvault_name, resource_group_name, region):
 
 def upload_secret(resource_group_name, region, keyvault_name,  secret, subscription, certificate_name):
 
-    set_keyvault_secret = "az keyvault secret set --name '{0}' --secret-name '{1}' --value '{2}'".format(keyvault_name, certificate_name, secret)
-    enable_keyvault_for_deployment = "az keyvault set-policy --name '{0}' --enabled-for-deployment {1} --enabled-for-template-deployment {1}".format(keyvault_name, "true")
+    set_keyvault_secret = "az keyvault secret set --vault-name '{0}' --name '{1}' --value '{2}'".format(keyvault_name, certificate_name, secret)
+    enable_keyvault_for_deployment = "az keyvault set-policy --name '{0}'".format(keyvault_name)
 
     status, output, error = execute_command(set_keyvault_secret)
 
