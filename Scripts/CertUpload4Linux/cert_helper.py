@@ -187,7 +187,7 @@ def parse_result(output, error):
 
 
 def set_subscription(subscription_id):
-    set_azure_subscription = "azure account set {0}".format(subscription_id)
+    set_azure_subscription = "az account set --subscription {0}".format(subscription_id)
     return_error_code = 0
 
     status, output, error = execute_command(set_azure_subscription)
@@ -201,7 +201,7 @@ def set_subscription(subscription_id):
 
 def create_resource_group(resource_group_name, region):
 
-    create_resource_group = "azure group create '{0}' '{1}'".format(resource_group_name, region)
+    create_resource_group = "az group create -n '{0}' -l '{1}'".format(resource_group_name, region)
     return_error_code = 0
 
     status, output, error = execute_command(create_resource_group)
@@ -214,8 +214,8 @@ def create_resource_group(resource_group_name, region):
 
 
 def create_key_vault(keyvault_name, resource_group_name, region):
-    create_keyvault = "azure keyvault create --vault-name '{0}' --resource-group '{1}' --location '{2}'".format(keyvault_name, resource_group_name, region)
-    show_keyvault = "azure keyvault show --vault-name '{0}'".format(keyvault_name)
+    create_keyvault = "az keyvault create --name '{0}' --resource-group '{1}' --location '{2}'".format(keyvault_name, resource_group_name, region)
+    show_keyvault = "az keyvault show --name '{0}'".format(keyvault_name)
 
     status, output, error = execute_command(create_keyvault)
 
@@ -243,8 +243,8 @@ def create_key_vault(keyvault_name, resource_group_name, region):
 
 def upload_secret(resource_group_name, region, keyvault_name,  secret, subscription, certificate_name):
 
-    set_keyvault_secret = "azure keyvault secret set --vault-name '{0}' --secret-name '{1}' --value '{2}'".format(keyvault_name, certificate_name, secret)
-    enable_keyvault_for_deployment = "azure keyvault set-policy --vault-name '{0}' --enabled-for-deployment {1} --enabled-for-template-deployment {1}".format(keyvault_name, "true")
+    set_keyvault_secret = "az keyvault secret set --name '{0}' --secret-name '{1}' --value '{2}'".format(keyvault_name, certificate_name, secret)
+    enable_keyvault_for_deployment = "az keyvault set-policy --name '{0}' --enabled-for-deployment {1} --enabled-for-template-deployment {1}".format(keyvault_name, "true")
 
     status, output, error = execute_command(set_keyvault_secret)
 
