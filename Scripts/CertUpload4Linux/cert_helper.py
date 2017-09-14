@@ -159,16 +159,18 @@ def parse_output(output):
 
             first_token = line_info[0].rstrip(':').encode('utf-8')
 
+
+            data_pattern = re.compile('(data:)')
             searchStr = output_lines[index].encode('utf-8')
             if "id" in searchStr:
-                value_pattern = re.compile(r'"([^"]*)"')
+                value_pattern = re.compile(".*\"id\": \"(.*)\",")
                 value_result = re.search(value_pattern, searchStr)
                 if value_result:
                     result.addData("id", value_result.groups()[0])
 
-
             if error_token in first_token:
                     result.setErrorMessage(output_lines[index].lstrip("error:").encode('utf-8'))
+
 
             #TODO: Change this to use regex to collect data accurately
             elif data_token in first_token:
