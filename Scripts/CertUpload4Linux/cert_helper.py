@@ -159,8 +159,18 @@ def parse_output(output):
 
             first_token = line_info[0].rstrip(':').encode('utf-8')
 
+
+            data_pattern = re.compile('(data:)')
+            searchStr = output_lines[index].encode('utf-8')
+            if "id" in searchStr:
+                value_pattern = re.compile(".*\"id\": \"(.*)\",")
+                value_result = re.search(value_pattern, searchStr)
+                if value_result:
+                    result.addData("id", value_result.groups()[0])
+
             if error_token in first_token:
                     result.setErrorMessage(output_lines[index].lstrip("error:").encode('utf-8'))
+
 
             #TODO: Change this to use regex to collect data accurately
             elif data_token in first_token:
@@ -187,7 +197,7 @@ def parse_result(output, error):
 
 
 def set_subscription(subscription_id):
-    set_azure_subscription = "azure account set {0}".format(subscription_id)
+    set_azure_subscription = "az account set --subscription {0}".format(subscription_id)
     return_error_code = 0
 
     status, output, error = execute_command(set_azure_subscription)
@@ -201,7 +211,7 @@ def set_subscription(subscription_id):
 
 def create_resource_group(resource_group_name, region):
 
-    create_resource_group = "azure group create '{0}' '{1}'".format(resource_group_name, region)
+    create_resource_group = "az group create -n '{0}' -l '{1}'".format(resource_group_name, region)
     return_error_code = 0
 
     status, output, error = execute_command(create_resource_group)
@@ -214,8 +224,8 @@ def create_resource_group(resource_group_name, region):
 
 
 def create_key_vault(keyvault_name, resource_group_name, region):
-    create_keyvault = "azure keyvault create --vault-name '{0}' --resource-group '{1}' --location '{2}'".format(keyvault_name, resource_group_name, region)
-    show_keyvault = "azure keyvault show --vault-name '{0}'".format(keyvault_name)
+    create_keyvault = "az keyvault create --name '{0}' --resource-group '{1}' --location '{2}' --enabled-for-deployment '{3}' --enabled-for-template-deployment '{3}'".format(keyvault_name, resource_group_name, region, "true")
+    show_keyvault = "az keyvault show --name '{0}'".format(keyvault_name)
 
     status, output, error = execute_command(create_keyvault)
 
@@ -243,8 +253,8 @@ def create_key_vault(keyvault_name, resource_group_name, region):
 
 def upload_secret(resource_group_name, region, keyvault_name,  secret, subscription, certificate_name):
 
-    set_keyvault_secret = "azure keyvault secret set --vault-name '{0}' --secret-name '{1}' --value '{2}'".format(keyvault_name, certificate_name, secret)
-    enable_keyvault_for_deployment = "azure keyvault set-policy --vault-name '{0}' --enabled-for-deployment {1} --enabled-for-template-deployment {1}".format(keyvault_name, "true")
+    set_keyvault_secret = "az keyvault secret set --vault-name '{0}' --name '{1}' --value '{2}'".format(keyvault_name, certificate_name, secret)
+    #enable_keyvault_for_deployment = "az keyvault set-policy --name '{0}' --certificate-permissions '{1}' --key-permissions '{2}' --secret-permissions '{3}'".format(keyvault_name, "create delete get getissuers import list update", "create decrypt delete encrypt get import list sign unwrapKey update wrapKey", "delete get list set")
 
     status, output, error = execute_command(set_keyvault_secret)
 
@@ -256,12 +266,12 @@ def upload_secret(resource_group_name, region, keyvault_name,  secret, subscript
     if not sourceurl_result.IsSuccess():
         raise OperationFailed(set_keyvault_secret, sourceurl_result.error_msg)
 
-    status2, output2, error2 = execute_command(enable_keyvault_for_deployment)
-    parsed_result = parse_result(output2, error2)
-    parsed_result.error_code = status2
+    #status2, output2, error2 = execute_command(enable_keyvault_for_deployment)
+    #parsed_result = parse_result(output2, error2)
+    #parsed_result.error_code = status2
 
-    if 0 != status2:
-        raise OperationFailed(enable_keyvault_for_deployment, error2)
+    #if 0 != status2:
+       #raise OperationFailed(enable_keyvault_for_deployment, error2)
 
     return sourceurl
 
