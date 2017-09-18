@@ -9,10 +9,10 @@
       "value": "Cluster"
     },
     "adminUserName": {
-      "value": "admuser"
+      "value": "chacko"
     },
     "adminPassword": {
-      "value": "val$$$"
+      "value": "Password!1"
     },
     "vmImagePublisher": {
       "value": "MicrosoftWindowsServer"
@@ -21,7 +21,7 @@
       "value": "WindowsServer"
     },
     "vmImageSku": {
-      "value": "2016-Datacenter"
+      "value": "2012-R2-Datacenter"
     },
     "vmImageVersion": {
       "value": "latest"

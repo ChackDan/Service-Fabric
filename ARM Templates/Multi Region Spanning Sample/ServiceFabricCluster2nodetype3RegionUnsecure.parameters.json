@@ -1,0 +1,78 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "clusterName": {
+      "value": "chacko"
+    },
+    "clusterRegion1": {
+      "value": "westus"
+    },
+    "clusterRegion2": {
+      "value": "centralus"
+    },
+    "clusterRegion3": {
+      "value": "eastus2"
+    },
+    "adminUserName": {
+      "value": "chacko"
+    },
+    "adminPassword": {
+      "value": "Password!1"
+    },
+    "vmImagePublisher": {
+      "value": "MicrosoftWindowsServer"
+    },
+    "vmImageOffer": {
+      "value": "WindowsServer"
+    },
+    "vmImageSku": {
+      "value": "2016-Datacenter-with-Containers"
+    },
+    "vmImageVersion": {
+      "value": "latest"
+    },
+    "nt0InstanceCount": {
+      "value": 5
+    },
+    "nt1InstanceCount": {
+      "value": 5
+    },
+    "nt0SkuName": {
+      "value": "Standard_D4_v2"
+    },
+    "nt1SkuName": {
+      "value": "Standard_D4_v2"
+    },
+    "nt0DurabilityLevel": {
+      "value": "Bronze"
+    },
+    "nt1DurabilityLevel": {
+      "value": "Bronze"
+    },
+    "reliabilityLevel": {
+      "value": "Platinum"
+    },
+    "trafficRoutingMethod" : {
+      "value": "Performance"
+    },
+    "loadBalancedAppPort1": {
+      "value": 80
+    },
+    "loadBalancedAppPort2": {
+      "value": 5000
+    },
+    "loadBalancedAppPort3": {
+      "value": 8080
+    },
+    "loadBalancedAppPort4": {
+      "value": 8081
+    },
+    "loadBalancedAppPort5": {
+      "value": 8082
+    },
+    "sharedKey": {
+      "value": "33aaca0d4fcb457ca3f443354c4829a9"
+    }
+  }
+}

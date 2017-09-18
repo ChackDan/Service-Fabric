@@ -1,0 +1,138 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "clusterName": {
+      "value": "Jeero"
+    },
+    "clusterRegion1": {
+      "value": "West Europe"
+    },
+    "clusterRegion2": {
+      "value": "North Europe"
+    },
+    "clusterRegion3": {
+      "value": "East US 2"
+    },
+    "adminUserName": {
+      "value": "paolos"
+    },
+    "adminPassword": {
+      "value": "Trustno1"
+    },
+    "vmImagePublisher": {
+      "value": "MicrosoftWindowsServer"
+    },
+    "vmImageOffer": {
+      "value": "WindowsServer"
+    },
+    "vmImageSku": {
+      "value": "2016-Datacenter-with-Containers"
+    },
+    "vmImageVersion": {
+      "value": "latest"
+    },
+    "nt0InstanceCount": {
+      "value": 5
+    },
+    "nt1InstanceCount": {
+      "value": 5
+    },
+    "nt0SkuName": {
+      "value": "Standard_D3_v2"
+    },
+    "nt1SkuName": {
+      "value": "Standard_D2_v2"
+    },
+    "nt0DurabilityLevel": {
+      "value": "Bronze"
+    },
+    "nt1DurabilityLevel": {
+      "value": "Bronze"
+    },
+    "reliabilityLevel": {
+      "value": "Platinum"
+    },
+    "trafficRoutingMethod" : {
+      "value": "Performance"
+    },
+    "SFReverseProxyPort": {
+      "value": 19081
+    },
+    "loadBalancedAppPort1": {
+      "value": 80
+    },
+    "loadBalancedAppPort2": {
+      "value": 5000
+    },
+    "loadBalancedAppPort3": {
+      "value": 8080
+    },
+    "loadBalancedAppPort4": {
+      "value": 8081
+    },
+    "loadBalancedAppPort5": {
+      "value": 8082
+    },
+    "certificateStorevalue": {
+      "value": "My"
+    },
+    "certificateThumbprint": {
+      "value": "A3FDC8CC241E85A89AD996AEFA4FB65F40F790C9"
+    },
+    "certificateRegion1UrlValue": {
+      "value": "https://jeerowekeyvault.vault.azure.net:443/secrets/jeeroPrimaryCertificate/3a353a5067c54590afb767e70bdba0c7"
+    },
+    "certificateRegion2UrlValue": {
+      "value": "https://jeeronekeyvault.vault.azure.net:443/secrets/jeeroPrimaryCertificate/70862c8af74245e1ab1a17e7533c7e85"
+    },
+    "certificateRegion3UrlValue": {
+      "value": "https://jeerouskeyvault.vault.azure.net:443/secrets/jeeroPrimaryCertificate/9ec31bb213954a9db7e615cc315cad3d"
+    },
+    "secCertificateThumbprint": {
+      "value": "5BA00A20472900046C63DD911CF7D80CE9B8647D"
+    },
+    "secCertificateRegion1UrlValue": {
+      "value": "https://jeerowekeyvault.vault.azure.net:443/secrets/jeeroSecondaryCertificate/cd2151a2dd0046549aad154650fded43"
+    },
+    "secCertificateRegion2UrlValue": {
+      "value": "https://jeeronekeyvault.vault.azure.net:443/secrets/jeeroSecondaryCertificate/70747273c68c465b80d21d3c40a1a5e2"
+    },
+    "secCertificateRegion3UrlValue": {
+      "value": "https://jeerouskeyvault.vault.azure.net:443/secrets/jeeroSecondaryCertificate/085e397d735d47f9a90590214c46e733"
+    },
+    "adminCertificateThumbprint": {
+      "value": "2B2B19AF3A6643BBFE0F1B2A60766E7F1069EF39"
+    },
+    "adminCertificateRegion1UrlValue": {
+      "value": "https://jeerowekeyvault.vault.azure.net:443/secrets/jeeroAdminCertificate/84ebbaf021f041d0a817eebb118dc21e"
+    },
+    "adminCertificateRegion2UrlValue": {
+      "value": "https://jeeronekeyvault.vault.azure.net:443/secrets/jeeroAdminCertificate/6f8e5f24e68f4a039b53b8626df56dd5"
+    },
+    "adminCertificateRegion3UrlValue": {
+      "value": "https://jeerouskeyvault.vault.azure.net:443/secrets/jeeroAdminCertificate/bebbc0b85a754cd79f8be12d8effbe99"
+    },
+    "sourceVaultRegion1ResourceId": {
+      "value": "/subscriptions/1a45a694-ae23-4650-9774-89a571c462f6/resourceGroups/JeeroKeyVaultResourceGroup/providers/Microsoft.KeyVault/vaults/JeeroWEKeyVault"
+    },
+    "sourceVaultRegion2ResourceId": {
+      "value": "/subscriptions/1a45a694-ae23-4650-9774-89a571c462f6/resourceGroups/JeeroKeyVaultResourceGroup/providers/Microsoft.KeyVault/vaults/JeeroNEKeyVault"
+    },
+    "sourceVaultRegion3ResourceId": {
+      "value": "/subscriptions/1a45a694-ae23-4650-9774-89a571c462f6/resourceGroups/JeeroKeyVaultResourceGroup/providers/Microsoft.KeyVault/vaults/JeeroUSKeyVault"
+    },
+    "aadTenantId": {
+      "value": "1c685c6c-c9bb-467b-b907-b1e654b8b557"
+    },
+    "aadClusterApplicationId": {
+      "value": "82d89f6d-53f7-4f72-a439-70a08587d2a4"
+    },
+    "aadClientApplicationId": {
+      "value": "c40da966-691a-4a08-8558-0770c2db3787"
+    },
+    "sharedKey": {
+      "value": "33aaca0d4fcb457ca3f443354c4829a9"
+    }
+  }
+}
