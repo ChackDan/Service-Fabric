@@ -3,13 +3,13 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "clusterName": {
-      "value": "linuxclusterwithomsagent"
+      "value": "linuxcluster"
     },
      "adminUserName": {
       "value": "adminuser"
       },
     "adminPassword": {
-      "value": ""
+      "value": "Pa$$word$1234"
       },
     "clusterLocation": {
       "value": "eastus"
@@ -31,9 +31,6 @@
     },
     "supportLogStorageAccountType": {
       "value": "Standard_LRS"
-    },
-    "omsWorkspacename": {
-      "value": "sfomsworkspace"
     }
   }
 }

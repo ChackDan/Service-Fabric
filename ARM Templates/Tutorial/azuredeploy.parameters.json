@@ -1,0 +1,66 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "clusterLocation": {
+      "value": "eastus"
+    },
+    "clusterName": {
+      "value": "mycluster918"
+    },
+    "adminUserName": {
+      "value": "adminuser"
+    },
+    "adminPassword": {
+      "value": "Pa$$word$1234"
+    },
+    "vmImagePublisher": {
+      "value": "MicrosoftWindowsServer"
+    },
+    "vmImageOffer": {
+      "value": "WindowsServer"
+    },
+    "vmImageSku": {
+      "value": "2016-Datacenter-with-Containers"
+    },
+    "vmImageVersion": {
+      "value": "latest"
+    },
+    "loadBalancedAppPort1": {
+      "value": 80
+    },
+    "loadBalancedAppPort2": {
+      "value": 8081
+    },
+    "certificateStorevalue": {
+      "value": "My"
+    },
+    "certificateThumbprint": {
+      "value": "‎"
+    },
+    "sourceVaultvalue": {
+      "value": ""
+    },
+    "certificateUrlvalue": {
+      "value": ""
+    },
+    "clusterProtectionLevel": {
+      "value": "EncryptAndSign"
+    },
+    "storageAccountType": {
+      "value": "Standard_LRS"
+    },
+    "supportLogStorageAccountType": {
+      "value": "Standard_LRS"
+    },
+    "applicationDiagnosticsStorageAccountType": {
+      "value": "Standard_LRS"
+    },
+    "vmSKU": {
+      "value": "Standard_D1_v2"
+    },
+    "vmInstanceCount": {
+      "value": 5
+    }
+  }
+}
