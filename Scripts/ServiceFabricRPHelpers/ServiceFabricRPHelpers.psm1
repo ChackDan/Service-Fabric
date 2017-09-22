@@ -407,9 +407,11 @@ if($CreateSelfSignedCertificate)
 
     Write-Host "Creating new self signed certificate at $NewPfxFilePath"
     
-    ## Changes to PSPKI version 3.5.2 New-SelfSignedCertificate replaced by New-SelfSignedCertificateEx
+    ## Changes to PSPKI version 3.2.5 New-SelfSignedCertificate replaced by New-SelfSignedCertificateEx
     $PspkiVersion = (Get-Module PSPKI).Version
-    if($PSPKIVersion.Major -ieq 3 -And $PspkiVersion.Minor -ieq 2 -And $PspkiVersion.Build -ieq 5) {
+    $MinPspkiVersion= New-Object System.Version("3.2.5.0")
+
+    if($PspkiVersion -ge $MinPspkiVersion) {
         New-SelfsignedCertificateEx -Subject "CN=$DnsName" -EKU "Server Authentication", "Client authentication" -KeyUsage "KeyEncipherment, DigitalSignature" -Path $NewPfxFilePath -Password $securePassword -Exportable
     }
     else {
