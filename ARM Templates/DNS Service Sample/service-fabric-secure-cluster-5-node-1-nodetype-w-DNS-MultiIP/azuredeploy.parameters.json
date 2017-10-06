@@ -36,13 +36,13 @@
       "value": "My"
     },
     "certificateThumbprint": {
-      "value": "C2D7E11DD35153A702A51D10A424A3014B9B6E8B‎"
+      "value": "‎"
     },
     "sourceVaultvalue": {
-      "value": "/subscriptions/6c653126-e4ba-42cd-a1dd-f7bf96ae7a47/resourceGroups/chackowestuskv/providers/Microsoft.KeyVault/vaults/westuskv1"
+      "value": ""
     },
     "certificateUrlvalue": {
-      "value": "https://westuskv1.vault.azure.net:443/secrets/chackonewcertificate2/607ca6c0ff274101a5711084d6f4468c"
+      "value": ""
     },
     "clusterProtectionLevel": {
       "value": "EncryptAndSign"
