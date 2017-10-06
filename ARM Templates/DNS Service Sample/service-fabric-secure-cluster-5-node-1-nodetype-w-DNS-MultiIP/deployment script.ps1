@@ -1,6 +1,5 @@
 ﻿
 #++++++++++++++++++++++++++++++Do not run it, it is just so that you know what subscription ID  is which +++++
-Select-AzureRmSubscription -SubscriptionId "6c653126-e4ba-42cd-a1dd-f7bf96ae7a47" #build Subscription
 Select-AzureRmSubscription -SubscriptionId "33bd304f-367f-4b72-a3ea-7d3576781ceb" #Ignite Subscription
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #
@@ -8,17 +7,9 @@ Select-AzureRmSubscription -SubscriptionId "33bd304f-367f-4b72-a3ea-7d3576781ceb
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
-########### Deploy the cluster - unsecure parms and template
-
-$resourceGroup = "xrg9"
-$templateParmfile= "C:\Users\chackdan\Documents\GitHub\Service-Fabric\ARM Templates\Multi Region Spanning Sample\ServiceFabricCluster2nodetype3RegionUnsecure.parameters.json"
-$templateFile = "C:\Users\chackdan\Documents\GitHub\Service-Fabric\ARM Templates\Multi Region Spanning Sample\ServiceFabricCluster2nodetype3RegionUnsecure.json"
-$locName="eastus2"
-$SubID = "33bd304f-367f-4b72-a3ea-7d3576781ceb"
-
 ########### Deploy the cluster - secure parms and template
 
-$resourceGroup = "xrg0"
+$resourceGroup = "chackmip1"
 $templateParmfile= "C:\Users\chackdan\Documents\GitHub\Service-Fabric\ARM Templates\Multi Region Spanning Sample\Secure\ServiceFabricCluster2nodetype3Regionsecure.parameters.json"
 $templateFile = "C:\Users\chackdan\Documents\GitHub\Service-Fabric\ARM Templates\Multi Region Spanning Sample\Secure\ServiceFabricCluster2nodetype3RegionSecure.json"
 $locName="eastus2"

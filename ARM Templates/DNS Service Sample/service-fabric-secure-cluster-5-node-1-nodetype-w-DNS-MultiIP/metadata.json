@@ -1,0 +1,7 @@
+{
+  "itemDisplayName": "Deploy a 5 Node Secure windows Cluster with DNS service with MultiIP enabled",
+  "description": "This template allows you to deploy a secure 5 node Service fabric Cluster running Windows server 2016 Data center with DNS service on with MultiIP",
+  "summary": "This template takes a minimum amount of parameters and deploys 5  Node Service Fabric Cluster",
+  "githubUsername": "chackdan",
+  "dateUpdated": "2017-10-01"
+}

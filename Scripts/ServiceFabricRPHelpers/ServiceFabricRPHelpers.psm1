@@ -1,5 +1,4 @@
-﻿
-function Get-CurrentScriptDirectory { 
+﻿function Get-CurrentScriptDirectory { 
 	$Invocation = (Get-Variable MyInvocation -Scope 1).Value 
 	Split-Path $Invocation.MyCommand.Path 
 }
