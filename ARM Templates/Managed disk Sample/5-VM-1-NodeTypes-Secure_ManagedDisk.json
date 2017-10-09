@@ -260,7 +260,7 @@
       }
     },
     {
-      "apiVersion": "[variables('lbApiVersion')]",**
+      "apiVersion": "[variables('lbApiVersion')]",
       "type": "Microsoft.Network/loadBalancers",
       "name": "[concat('LB','-', parameters('clusterName'),'-',variables('vmNodeType0Name'))]",
       "location": "[variables('computeLocation')]",
