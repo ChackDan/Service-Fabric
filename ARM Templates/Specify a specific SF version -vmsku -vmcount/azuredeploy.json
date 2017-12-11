@@ -484,7 +484,7 @@
           "extensionProfile": {
             "extensions": [
               {
-                "name": "[concat('ServiceFabricNodeVmExt','_vmNodeType0Name')]",
+                "name": "[concat('ServiceFabricNodeVmExt','_',variables('vmNodeType0Name'))]",
                 "properties": {
                   "type": "ServiceFabricNode",
                   "autoUpgradeMinorVersion": false,
@@ -508,7 +508,7 @@
                 }
               },
               {
-                "name": "[concat('VMDiagnosticsVmExt','_vmNodeType0Name')]",
+                "name": "[concat('VMDiagnosticsVmExt','_',variables('vmNodeType0Name'))]",
                 "properties": {
                   "type": "IaaSDiagnostics",
                   "autoUpgradeMinorVersion": true,
