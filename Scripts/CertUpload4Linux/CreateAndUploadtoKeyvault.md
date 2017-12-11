@@ -24,6 +24,11 @@ After formatting the secret you can upload as normal to keyvault using the Azure
 azure keyvault secret set <your-vault-name> <your-secret-name> -w $formatted_secret
 ```
 
+The command for Azure CLI 2.0 is
+```
+az keyvault secret set --vault-name <your-vault-name> --name <your-secret-name> --value $formatted_secret
+```
+
 **Note: Your keyvault will need to have the flags `enable-for-deployment` and `enable-for-template-deployment` set to deploy using this certificate.
 
 ## Template File Settings
@@ -39,10 +44,18 @@ Secret's URL:
 ```
 SECRET_URL=$(azure keyvault secret show <your-vault-name> <your-secret-name> --json | python -c 'import json,sys;print json.load(sys.stdin)["id"]')
 ```
+The command for Azure CLI 2.0 is
+```
+SECRET_URL=$(az keyvault secret show --vault-name <your-vault-name> --name <your-secret-name> --output json | python -c 'import json,sys;print json.load(sys.stdin)["id"]')
+```
 
 Keyvault Resource Id:
 ```
 KEYVAULTID=$(azure keyvault show <your-vault-name> --json | python -c 'import json,sys;print json.load(sys.stdin)["id"]')
+```
+The command for Azure CLI 2.0 is
+```
+KEYVAULTID=$(az keyvault show --name <your-vault-name> --output json | python -c 'import json,sys;print json.load(sys.stdin)["id"]')
 ```
 
 ### Where they are used
