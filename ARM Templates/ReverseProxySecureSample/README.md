@@ -16,7 +16,7 @@ To read about Deploy templates to Azure, refer the section [Deploy the template 
 This upgrade step takes care of installing the Reverse Proxy certificate on all the VMs and acl'ing the certificate such that Service Fabric can access it.
 Here the new certificate is added to the virtual machine scale set osProfile and the Service Fabric extension for virtual machine scale sets.
 
-1. Template to provision a five node secure cluster with new certificates to be used by Reverse Proxy later- 5-VM-1-NodeTypes-Secure_Step2.JSON 
+1. Template to provision a five node secure cluster with new certificates to be used by Reverse Proxy later- 5-VM-1-NodeTypes-SecureRP_Step2.JSON 
 2. Template parameters for the above template - 5-VM-1-NodeTypes-SecureRP_Step2.parameters.JSON 
 
 ### Step3 :Enable Reverse Proxy using ARM Powershell
